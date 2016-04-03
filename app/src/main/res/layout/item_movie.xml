@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="6dp"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginTop="6dp"
+    card_view:cardCornerRadius="2dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/poster"
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/movie_placeholder" />
+
+
+        <TextView
+            android:id="@+id/title_movie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/poster"
+            android:textSize="@dimen/text_body"
+            tools:text="Fight Club" />
+
+        <TextView
+            android:id="@+id/overview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_movie"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/poster"
+            android:textSize="@dimen/text_small_body"
+            android:maxLength="120"
+            android:ellipsize="end"
+            android:maxLines="4"
+            tools:text="A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
+

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">QueryMovies</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_action_cancel">Cancel</string>
+    <string name="dialog_error_title">Sorry</string>
+
+    <string name="empty_movies">There aren\'t any movies</string>
+    <string name="error_loading_movies">There was a problem loading the movies</string>
+</resources>
