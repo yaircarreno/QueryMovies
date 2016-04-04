@@ -1,6 +1,6 @@
 # Using MVP + Reactive + Dagger
 
-This repo shows how we can use MVP + Reactive + Dagger in our project.
+This repo shows how we can use MVP + Reactive + Dagger in our project. It is consuming the API from [TheMovieDB](https://www.themoviedb.org/)
 
 ## Screenshot
 
