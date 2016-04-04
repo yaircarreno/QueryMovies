@@ -14,7 +14,7 @@ This repo shows how we can use MVP + Reactive + Dagger in our project.
 - CardViews 
 - [RxJava](https://github.com/ReactiveX/RxJava)
 - [RxAndroid](https://github.com/ReactiveX/RxAndroid)
-- [RXBinding](https://github.com/JakeWharton/RxBinding)
+- [RxBinding](https://github.com/JakeWharton/RxBinding)
 - [Retrolambda] (https://github.com/orfjackal/retrolambda)
 - [Retrofit 2](http://square.github.io/retrofit/)
 - [Dagger 2](http://google.github.io/dagger/)
