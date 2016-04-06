@@ -18,12 +18,12 @@ import timber.log.Timber;
 public class MainPresenter extends BasePresenter<MainMvpView> {
 
     private final DataManager mDataManager;
-    private CompositeSubscription mCompositeSubscription;
+    private final CompositeSubscription mCompositeSubscription;
 
     @Inject
-    public MainPresenter(DataManager dataManager) {
+    public MainPresenter(DataManager dataManager, CompositeSubscription compositeSubscription) {
         mDataManager = dataManager;
-        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription = compositeSubscription;
     }
 
     @Override

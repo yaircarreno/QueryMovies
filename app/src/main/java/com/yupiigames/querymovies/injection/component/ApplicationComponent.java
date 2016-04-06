@@ -13,8 +13,8 @@ import com.yupiigames.querymovies.injection.module.ApplicationModule;
 import com.yupiigames.querymovies.injection.module.NetworkModule;
 import com.yupiigames.querymovies.injection.scope.ApplicationContext;
 import javax.inject.Singleton;
-
 import dagger.Component;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by yair.carreno on 3/19/2016.
@@ -33,4 +33,5 @@ public interface ApplicationComponent {
     PreferencesHelper preferencesHelper();
     DatabaseHelper databaseHelper();
     DataManager dataManager();
+    CompositeSubscription compositeSubscription();
 }

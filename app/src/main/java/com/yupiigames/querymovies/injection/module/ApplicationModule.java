@@ -5,8 +5,11 @@ import android.content.Context;
 
 import com.yupiigames.querymovies.injection.scope.ApplicationContext;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Provide application-level dependencies
@@ -30,5 +33,11 @@ public class ApplicationModule {
     @ApplicationContext
     Context provideContext() {
         return mApplication;
+    }
+
+    @Provides
+    @Singleton
+    CompositeSubscription provideCompositeSubscription() {
+        return new CompositeSubscription();
     }
 }
