@@ -33,5 +33,4 @@ public interface ApplicationComponent {
     PreferencesHelper preferencesHelper();
     DatabaseHelper databaseHelper();
     DataManager dataManager();
-    CompositeSubscription compositeSubscription();
 }

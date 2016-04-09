@@ -34,10 +34,4 @@ public class ApplicationModule {
     Context provideContext() {
         return mApplication;
     }
-
-    @Provides
-    @Singleton
-    CompositeSubscription provideCompositeSubscription() {
-        return new CompositeSubscription();
-    }
 }

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import com.yupiigames.querymovies.R;
 import com.yupiigames.querymovies.data.SyncService;
 import com.yupiigames.querymovies.data.model.Movie;
@@ -76,10 +77,6 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         mMainPresenter.detachView();
     }
 
-    public SearchView getSearchView(){
-        return searchView;
-    }
-
     /***** MVP View methods implementation *****/
 
     @Override
@@ -115,7 +112,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        mMainPresenter.loadSearch();
+        mMainPresenter.loadSearch(RxSearchView.queryTextChanges(searchView));
         return true;
     }
 }
