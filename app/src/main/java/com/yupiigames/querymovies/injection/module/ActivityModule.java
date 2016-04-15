@@ -3,6 +3,7 @@ package com.yupiigames.querymovies.injection.module;
 import android.app.Activity;
 import android.content.Context;
 import com.yupiigames.querymovies.injection.scope.ActivityContext;
+import com.yupiigames.querymovies.ui.adapter.MoviesAdapter;
 
 import javax.inject.Singleton;
 
@@ -17,7 +18,6 @@ import rx.subscriptions.CompositeSubscription;
 public class ActivityModule {
 
     private Activity mActivity;
-    private CompositeSubscription mCompositeSubscription;
 
     public ActivityModule(Activity activity) {
         this.mActivity = activity;
@@ -32,5 +32,10 @@ public class ActivityModule {
     @ActivityContext
     Context provideContext() {
         return mActivity;
+    }
+
+    @Provides
+    MoviesAdapter provideMoviesAdapter() {
+        return new MoviesAdapter(mActivity);
     }
 }
