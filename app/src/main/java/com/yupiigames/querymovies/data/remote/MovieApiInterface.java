@@ -20,7 +20,8 @@ public interface MovieApiInterface {
     @GET(QueryMovieConstants.SEARCH_MOVIE_PATH)
     Observable<Result> getMovies(
             @Query(QueryMovieConstants.API_KEY) String apiKey,
-            @Query(QueryMovieConstants.QUERY) String query
+            @Query(QueryMovieConstants.QUERY) String query,
+            @Query(QueryMovieConstants.PAGE) String page
     );
 
     /******** Helper class that sets up a new services *******/

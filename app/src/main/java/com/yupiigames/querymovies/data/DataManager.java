@@ -37,8 +37,8 @@ public class DataManager {
         return mPreferencesHelper;
     }
 
-    public Observable<Movie> syncMovies(String title) {
-        return mMovieApiInterface.getMovies(QueryMovieConstants.API_KEY_CODE, title)
+    public Observable<Movie> syncMovies(String title, String page) {
+        return mMovieApiInterface.getMovies(QueryMovieConstants.API_KEY_CODE, title, page)
                 .concatMap(s -> mDatabaseHelper.setMovies(s.results))
                 .onErrorResumeNext(throwable -> {
                     return Observable.empty();

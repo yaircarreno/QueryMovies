@@ -14,5 +14,7 @@ public interface MainMvpView extends MvpView {
 
     void showError();
 
-    void syncMovies(String title);
+    void syncMovies(String title, String page);
+
+    void updateScroll();
 }

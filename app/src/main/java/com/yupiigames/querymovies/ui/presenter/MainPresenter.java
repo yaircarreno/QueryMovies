@@ -1,6 +1,8 @@
 package com.yupiigames.querymovies.ui.presenter;
 
 import android.text.TextUtils;
+
+import com.jakewharton.rxbinding.support.v7.widget.RecyclerViewScrollEvent;
 import com.yupiigames.querymovies.data.DataManager;
 import com.yupiigames.querymovies.ui.view.MainMvpView;
 import java.util.concurrent.TimeUnit;
@@ -36,15 +38,13 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     public void detachView() {
         super.detachView();
         if (mCompositeSubscription != null)
-            mCompositeSubscription.unsubscribe();
+            mCompositeSubscription.clear();
     }
 
     public void loadMovies() {
         checkViewAttached();
-        mCompositeSubscription.add(mDataManager.getMovies()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(response -> {
+        mCompositeSubscription.add(mDataManager.getMovies().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(response -> {
                     if (response.isEmpty()) {
                         getMvpView().showMoviesEmpty();
                     } else {
@@ -56,17 +56,27 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 }));
     }
 
-    public void loadSearch(Observable<CharSequence> observable) {
+    public void loadSearch(Observable<CharSequence> observable, String page) {
         checkViewAttached();
-        mCompositeSubscription.add(observable
-                .filter(charSequence -> !TextUtils.isEmpty(charSequence))
-                .throttleLast(100, TimeUnit.MILLISECONDS)
-                .debounce(200, TimeUnit.MILLISECONDS)
-                .onBackpressureLatest()
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(s -> s.toString())
-                .subscribe(getMvpView()::syncMovies, throwable -> {
+        mCompositeSubscription.add(observable.filter(charSequence -> !TextUtils.isEmpty(charSequence))
+                .throttleLast(100, TimeUnit.MILLISECONDS).debounce(200, TimeUnit.MILLISECONDS)
+                .onBackpressureLatest().observeOn(AndroidSchedulers.mainThread()).map(s -> s.toString())
+                .subscribe(title -> {
+                    getMvpView().syncMovies(title, page);
+                }, throwable -> {
                     getMvpView().showError();
+                }));
+    }
+
+    /**
+     * Management pagination how component Rx.
+     *
+     * @param observable : Observable from RecycleView component.
+     */
+    public void loadPager(Observable<RecyclerViewScrollEvent> observable) {
+        mCompositeSubscription.add(observable.subscribeOn(AndroidSchedulers.mainThread()).subscribe(
+                recyclerViewScrollEvent -> {
+                    getMvpView().updateScroll();
                 }));
     }
 }

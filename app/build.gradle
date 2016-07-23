@@ -77,10 +77,6 @@ dependencies {
     compile "com.jakewharton.rxbinding:rxbinding-design:$RX_BINDING_VERSION"
     compile "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$RX_BINDING_VERSION"
     compile "com.jakewharton.rxbinding:rxbinding-leanback-v17:$RX_BINDING_VERSION"
-    //Crashlytics
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
-        transitive = true;
-    }
     //Dagger
     compile  "com.google.dagger:dagger:$DAGGER_VERSION"
     provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2

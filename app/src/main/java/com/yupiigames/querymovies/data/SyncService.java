@@ -41,6 +41,7 @@ public class SyncService extends Service {
     public int onStartCommand(Intent intent, int flags, final int startId) {
         Timber.i("Starting sync...");
         String title = intent.getStringExtra("title");
+        String page = intent.getStringExtra("page");
         if (!NetworkUtil.isNetworkConnected(this)) {
             Timber.i("Sync canceled, connection not available");
             AndroidComponentUtil.toggleComponent(this, SyncOnConnectionAvailable.class, true);
@@ -50,7 +51,7 @@ public class SyncService extends Service {
 
         if (mSubscription != null && !mSubscription.isUnsubscribed())
             mSubscription.unsubscribe();
-        mSubscription = mDataManager.syncMovies(title)
+        mSubscription = mDataManager.syncMovies(title, page)
                 .subscribeOn(Schedulers.io()).subscribe(movie -> {
                 }, throwable -> {
                     Timber.w(throwable, "Error syncing.");

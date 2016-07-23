@@ -2,12 +2,10 @@ package com.yupiigames.querymovies;
 
 import android.app.Application;
 import android.content.Context;
-import com.crashlytics.android.Crashlytics;
 import com.yupiigames.querymovies.injection.component.ApplicationComponent;
 import com.yupiigames.querymovies.injection.component.DaggerApplicationComponent;
 import com.yupiigames.querymovies.injection.module.ApplicationModule;
 import com.yupiigames.querymovies.injection.module.NetworkModule;
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -22,7 +20,6 @@ public class QueryMoviesApplication extends Application {
         super.onCreate();
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-            Fabric.with(this, new Crashlytics());
         }
     }
     /**
