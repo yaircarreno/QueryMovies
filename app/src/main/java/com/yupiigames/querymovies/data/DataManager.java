@@ -26,7 +26,7 @@ public class DataManager {
         this.mDatabaseHelper = databaseHelper;
     }
 
-    public Observable<Boolean> syncMovies(String title, String page) {
+    public Observable<List<Movie>> syncMovies(String title, String page) {
         return mMovieApiInterface.getMovies(QueryMovieConstants.API_KEY_CODE, title, page)
                 .concatMap(s -> mDatabaseHelper.setMovies(s.results()))
                 .onErrorResumeNext(throwable -> {

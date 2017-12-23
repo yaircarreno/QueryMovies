@@ -23,7 +23,7 @@ public class DatabaseHelper {
     DatabaseHelper() {
     }
 
-    public Observable<Boolean> setMovies(final Collection<Movie> newMovies) {
+    public Observable<List<Movie>> setMovies(final List<Movie> newMovies) {
         return Observable.defer(() -> {
             BriteDatabase.Transaction transaction = db.newTransaction();
             try {
@@ -34,14 +34,14 @@ public class DatabaseHelper {
                                     .title(movie.title()).overview(movie.overview())
                                     .posterPath(movie.posterPath()).releaseDate(movie.releaseDate()).build());
                     if (result < 0) {
-                        return Observable.just(false);
+                        return Observable.just(null);
                     }
                 }
                 transaction.markSuccessful();
             } finally {
                 transaction.end();
             }
-            return Observable.just(true);
+            return Observable.just(newMovies);
         });
     }
 

@@ -33,12 +33,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         this.mContext = context;
     }
 
-    public void setMovies(List<Movie> movies, int page) {
-        if (page > QueryMovieConstants.FIRST_PAGE) {
-            this.mMovies.addAll(movies);
-        } else {
-            this.mMovies = movies;
-        }
+    public void setOptions(List<Movie> movies) {
+        this.mMovies = movies;
     }
 
     @Override
