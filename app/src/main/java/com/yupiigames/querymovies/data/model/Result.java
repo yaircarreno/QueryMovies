@@ -1,78 +1,36 @@
 package com.yupiigames.querymovies.data.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.util.ArrayList;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
  * Created by yair.carreno on 3/20/2016.
  */
-public class Result implements Parcelable {
 
-    public int page;
-    public List<Movie> results;
-    public int total_results;
-    public int total_pages;
+@AutoValue
+public abstract class Result {
 
-    private Result(Parcel in) {
-        this.page = in.readInt();
-        if (results == null) {
-            results = new ArrayList();
-        }
-        in.readTypedList(results, Movie.CREATOR);
-        this.total_results = in.readInt();
-        this.total_pages = in.readInt();
-    }
+    @SerializedName("page")
+    public abstract int page();
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+    @SerializedName("results")
+    public abstract List<Movie> results();
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.page);
-        dest.writeTypedList(this.results);
-        dest.writeInt(this.total_results);
-        dest.writeInt(this.total_pages);
-    }
+    @Nullable
+    @SerializedName("dates")
+    public abstract Dates dates();
 
-    public static final Parcelable.Creator<Result> CREATOR = new Parcelable.Creator<Result>() {
-        public Result createFromParcel(Parcel in) {
-            return new Result(in);
-        }
+    @SerializedName("total_pages")
+    abstract int totalPages();
 
-        public Result[] newArray(int size) {
-            return new Result[size];
-        }
-    };
+    @SerializedName("total_results")
+    abstract int totalResults();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        Result queryResult = (Result) o;
-
-        if (page != queryResult.page)
-            return false;
-        if (results != null ? !results.equals(queryResult.results) : queryResult.results != null)
-            return false;
-        if (total_results != queryResult.total_results)
-            return false;
-        return (total_pages != queryResult.total_pages);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 31 * page;
-        result = 31 * result + (results != null ? results.hashCode() : 0);
-        result = 31 * result + total_results;
-        result = 31 * result + total_pages;
-        return result;
+    public static TypeAdapter<Result> typeAdapter(Gson gson) {
+        return new AutoValue_Result.GsonTypeAdapter(gson);
     }
 }

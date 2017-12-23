@@ -1,6 +1,5 @@
 package com.yupiigames.querymovies.injection.module;
 
-import com.squareup.otto.Bus;
 import com.yupiigames.querymovies.data.remote.MovieApiInterface;
 import javax.inject.Singleton;
 import dagger.Module;
@@ -16,11 +15,5 @@ public class NetworkModule {
     @Singleton
     MovieApiInterface provideMovieApi() {
         return MovieApiInterface.Creator.newMovieApi();
-    }
-
-    @Provides
-    @Singleton
-    Bus provideEventBus() {
-        return new Bus();
     }
 }

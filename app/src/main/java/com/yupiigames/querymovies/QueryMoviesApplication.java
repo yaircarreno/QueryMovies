@@ -6,6 +6,8 @@ import com.yupiigames.querymovies.injection.component.ApplicationComponent;
 import com.yupiigames.querymovies.injection.component.DaggerApplicationComponent;
 import com.yupiigames.querymovies.injection.module.ApplicationModule;
 import com.yupiigames.querymovies.injection.module.NetworkModule;
+import com.yupiigames.querymovies.injection.module.StorageModule;
+
 import timber.log.Timber;
 
 /**
@@ -40,6 +42,7 @@ public class QueryMoviesApplication extends Application {
             mApplicationComponent = DaggerApplicationComponent.builder()
                     .applicationModule(new ApplicationModule(this))
                     .networkModule(new NetworkModule())
+                    .storageModule(new StorageModule())
                     .build();
         }
         return mApplicationComponent;

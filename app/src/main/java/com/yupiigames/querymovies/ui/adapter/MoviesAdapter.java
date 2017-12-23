@@ -15,7 +15,8 @@ import com.yupiigames.querymovies.util.ViewUtil;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -50,10 +51,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         Movie movie = mMovies.get(position);
-        holder.titleTextView.setText(movie.title);
-        holder.overviewTextView.setText(movie.overview);
-        if (movie.poster_path != null && !movie.poster_path.isEmpty()) {
-            holder.setMovieImage(QueryMovieConstants.BASE_URL_IMG + movie.poster_path);
+        holder.titleTextView.setText(movie.title());
+        holder.overviewTextView.setText(movie.overview());
+        if (movie.posterPath() != null && !movie.posterPath().isEmpty()) {
+            holder.setMovieImage(QueryMovieConstants.BASE_URL_IMG + movie.posterPath());
         } else {
             holder.setPlaceholderImage();
         }
@@ -68,16 +69,16 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         int imgSizePxWight = ViewUtil.dpToPx(100);
         int imgSizePxHeight = ViewUtil.dpToPx(150);
-        @Bind(R.id.poster)  ImageView posterView;
-        @Bind(R.id.title_movie) TextView titleTextView;
-        @Bind(R.id.overview) TextView overviewTextView;
+        @BindView(R.id.poster)  ImageView posterView;
+        @BindView(R.id.title_movie) TextView titleTextView;
+        @BindView(R.id.overview) TextView overviewTextView;
 
-        public MovieViewHolder(View itemView) {
+        private MovieViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void setMovieImage(String urlImage) {
+        private void setMovieImage(String urlImage) {
             Picasso.with(mContext)
                     .load(urlImage)
                     .placeholder(R.drawable.movie_placeholder)
@@ -85,7 +86,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                     .into(posterView);
         }
 
-        public void setPlaceholderImage() {
+        private void setPlaceholderImage() {
             Picasso.with(mContext)
                     .load(R.drawable.movie_placeholder)
                     .resize(imgSizePxWight, imgSizePxHeight)

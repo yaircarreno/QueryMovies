@@ -12,7 +12,7 @@ import com.yupiigames.querymovies.R;
 
 public final class DialogFactory {
 
-    public static Dialog createSimpleOkErrorDialog(Context context, String title, String message) {
+    private static Dialog createSimpleOkErrorDialog(Context context, String title, String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
@@ -39,7 +39,7 @@ public final class DialogFactory {
         return createGenericErrorDialog(context, context.getString(messageResource));
     }
 
-    public static ProgressDialog createProgressDialog(Context context, String message) {
+    private static ProgressDialog createProgressDialog(Context context, String message) {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage(message);
         return progressDialog;

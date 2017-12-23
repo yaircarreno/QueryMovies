@@ -2,15 +2,16 @@ package com.yupiigames.querymovies.ui.presenter;
 
 import android.text.TextUtils;
 
-import com.jakewharton.rxbinding.support.v7.widget.RecyclerViewScrollEvent;
+import com.jakewharton.rxbinding2.support.v7.widget.RecyclerViewScrollEvent;
 import com.yupiigames.querymovies.data.DataManager;
 import com.yupiigames.querymovies.ui.view.MainMvpView;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -19,31 +20,32 @@ import timber.log.Timber;
 public class MainPresenter extends BasePresenter<MainMvpView> {
 
     private final DataManager mDataManager;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mDisposables;
 
     @Inject
-    public MainPresenter(DataManager dataManager) {
+    MainPresenter(DataManager dataManager) {
         mDataManager = dataManager;
     }
 
     @Override
     public void attachView(MainMvpView mvpView) {
         super.attachView(mvpView);
-        if (mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) {
-            mCompositeSubscription = new CompositeSubscription();
+        if (mDisposables == null) {
+            mDisposables = new CompositeDisposable();
         }
     }
 
     @Override
     public void detachView() {
         super.detachView();
-        if (mCompositeSubscription != null)
-            mCompositeSubscription.clear();
+        if (mDisposables != null) {
+            mDisposables.clear();
+        }
     }
 
     public void loadMovies() {
         checkViewAttached();
-        mCompositeSubscription.add(mDataManager.getMovies().observeOn(AndroidSchedulers.mainThread())
+        mDisposables.add(mDataManager.getMovies().observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe(response -> {
                     if (response.isEmpty()) {
                         getMvpView().showMoviesEmpty();
@@ -58,9 +60,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
     public void loadSearch(Observable<CharSequence> observable, String page) {
         checkViewAttached();
-        mCompositeSubscription.add(observable.filter(charSequence -> !TextUtils.isEmpty(charSequence))
+        mDisposables.add(observable.filter(charSequence -> !TextUtils.isEmpty(charSequence))
                 .throttleLast(100, TimeUnit.MILLISECONDS).debounce(200, TimeUnit.MILLISECONDS)
-                .onBackpressureLatest().observeOn(AndroidSchedulers.mainThread()).map(s -> s.toString())
+                .observeOn(AndroidSchedulers.mainThread()).map(CharSequence::toString)
                 .subscribe(title -> {
                     getMvpView().syncMovies(title, page);
                 }, throwable -> {
@@ -74,7 +76,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
      * @param observable : Observable from RecycleView component.
      */
     public void loadPager(Observable<RecyclerViewScrollEvent> observable) {
-        mCompositeSubscription.add(observable.subscribeOn(AndroidSchedulers.mainThread()).subscribe(
+        mDisposables.add(observable.subscribeOn(AndroidSchedulers.mainThread()).subscribe(
                 recyclerViewScrollEvent -> {
                     getMvpView().updateScroll();
                 }));

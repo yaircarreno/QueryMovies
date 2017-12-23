@@ -1,75 +1,86 @@
 package com.yupiigames.querymovies.data.model;
 
-import android.os.Parcel;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
-/**
- * Created by yair.carreno on 3/20/2016.
- */
-public class Movie implements Parcelable {
+import com.google.auto.value.AutoValue;
+import com.google.gson.annotations.SerializedName;
+import com.yupiigames.querymovies.data.local.Db;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 
-    public int id;
-    public String title;
-    public String poster_path;
-    public String overview;
-    public String release_date;
+import io.reactivex.functions.Function;
 
-    public Movie() {
+@AutoValue
+public abstract class Movie implements Parcelable {
+
+    public static final String TABLE_NAME = "movies";
+
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_TITLE = "title";
+    public static final String COLUMN_POSTER_PATH = "poster_path";
+    public static final String COLUMN_OVERVIEW = "overview";
+    public static final String COLUMN_RELEASE_DATE = "release_date";
+
+    public abstract int id();
+
+    public abstract String title();
+
+    @Nullable
+    @SerializedName("poster_path")
+    public abstract String posterPath();
+
+    public abstract String overview();
+
+    @Nullable
+    @SerializedName("release_date")
+    public abstract String releaseDate();
+
+    public static TypeAdapter<Movie> typeAdapter(Gson gson) {
+        return new AutoValue_Movie.GsonTypeAdapter(gson);
     }
 
-    private Movie(Parcel in) {
-        this.id = in.readInt();
-        this.title = in.readString();
-        this.poster_path = in.readString();
-        this.overview = in.readString();
-        this.release_date = in.readString();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
-        dest.writeString(this.title);
-        dest.writeString(this.poster_path);
-        dest.writeString(this.overview);
-        dest.writeString(this.release_date);
-    }
-
-    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
+    public static final Function<Cursor, Movie> MAPPER = cursor -> {
+        int id = Db.getInt(cursor, COLUMN_ID);
+        String title = Db.getString(cursor, COLUMN_TITLE);
+        String posterPath = Db.getString(cursor, COLUMN_POSTER_PATH);
+        String overview = Db.getString(cursor, COLUMN_OVERVIEW);
+        String releaseDate = Db.getString(cursor, COLUMN_RELEASE_DATE);
+        return new AutoValue_Movie(id, title, posterPath, overview, releaseDate);
     };
 
-    @Override
-    public int hashCode() {
-        int result = 31 * id;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (poster_path != null ? poster_path.hashCode() : 0);
-        result = 31 * result + (overview != null ? overview.hashCode() : 0);
-        result = 31 * result + (release_date != null ? release_date.hashCode() : 0);
-        return result;
-    }
+    public static final class Builder {
+        private final ContentValues values = new ContentValues();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        public Builder id(int id) {
+            values.put(COLUMN_ID, id);
+            return this;
+        }
 
-        Movie movie = (Movie) o;
+        public Builder title(String title) {
+            values.put(COLUMN_TITLE, title);
+            return this;
+        }
 
-        if (id != movie.id) return false;
-        if (title != null ? !title.equals(movie.title) : movie.title != null) return false;
-        if (poster_path != null ? !poster_path.equals(movie.poster_path) : movie.poster_path != null) return false;
-        if (overview != null ? !overview.equals(movie.overview) : movie.overview != null) return false;
-        return (release_date != null ? !release_date.equals(movie.release_date) : movie.release_date != null);
+        public Builder posterPath(String posterPath) {
+            values.put(COLUMN_POSTER_PATH, posterPath);
+            return this;
+        }
+
+        public Builder overview(String overview) {
+            values.put(COLUMN_OVERVIEW, overview);
+            return this;
+        }
+
+        public Builder releaseDate(String releaseDate) {
+            values.put(COLUMN_RELEASE_DATE, releaseDate);
+            return this;
+        }
+
+        public ContentValues build() {
+            return values;
+        }
     }
 }

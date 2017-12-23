@@ -2,14 +2,9 @@ package com.yupiigames.querymovies.injection.module;
 
 import android.app.Application;
 import android.content.Context;
-
 import com.yupiigames.querymovies.injection.scope.ApplicationContext;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Provide application-level dependencies
@@ -18,7 +13,7 @@ import rx.subscriptions.CompositeSubscription;
 @Module
 public class ApplicationModule {
 
-    protected final Application mApplication;
+    private final Application mApplication;
 
     public ApplicationModule(Application application) {
         this.mApplication = application;

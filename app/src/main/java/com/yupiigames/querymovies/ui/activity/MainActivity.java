@@ -11,8 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 
-import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
-import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView;
+import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 import com.yupiigames.querymovies.R;
 import com.yupiigames.querymovies.common.QueryMovieConstants;
 import com.yupiigames.querymovies.data.SyncService;
@@ -24,7 +24,8 @@ import com.yupiigames.querymovies.util.DialogFactory;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
@@ -38,13 +39,13 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     @Inject
     MoviesAdapter mMoviesAdapter;
 
-    @Bind(R.id.main_content)
+    @BindView(R.id.main_content)
     CoordinatorLayout coordinatorLayout;
 
-    @Bind(R.id.recycler_view)
+    @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
     //Use Item menu is out of scope for ButterKnife
     SearchView searchView;

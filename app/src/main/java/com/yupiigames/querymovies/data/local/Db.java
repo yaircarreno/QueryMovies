@@ -1,49 +1,32 @@
 package com.yupiigames.querymovies.data.local;
 
-import android.content.ContentValues;
 import android.database.Cursor;
-
-import com.yupiigames.querymovies.data.model.Movie;
 
 /**
  * Created by yair.carreno on 3/19/2016.
  */
-public class Db {
 
-    public Db() {
+public final class Db {
+
+    private static final int BOOLEAN_TRUE = 1;
+
+    public static String getString(Cursor cursor, String columnName) {
+        return cursor.getString(cursor.getColumnIndexOrThrow(columnName));
     }
 
-    public abstract static class MovieTable {
-        public static final String TABLE_NAME = "movie";
+    public static boolean getBoolean(Cursor cursor, String columnName) {
+        return getInt(cursor, columnName) == BOOLEAN_TRUE;
+    }
 
-        public static final String COLUMN_ID = "id";
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_POSTER_PATH = "poster_path";
-        public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_RELEASE_DATE = "release_date";
+    public static long getLong(Cursor cursor, String columnName) {
+        return cursor.getLong(cursor.getColumnIndexOrThrow(columnName));
+    }
 
-        public static final String CREATE = "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID
-                + " INTEGER NOT NULL PRIMARY KEY, " + COLUMN_TITLE + " TEXT NOT NULL, " + COLUMN_POSTER_PATH
-                + " TEXT, " + COLUMN_OVERVIEW + " TEXT, " + COLUMN_RELEASE_DATE + " TEXT" + " )";
+    public static int getInt(Cursor cursor, String columnName) {
+        return cursor.getInt(cursor.getColumnIndexOrThrow(columnName));
+    }
 
-        public static ContentValues toContentValues(Movie movie) {
-            ContentValues values = new ContentValues();
-            values.put(COLUMN_ID, movie.id);
-            values.put(COLUMN_TITLE, movie.title);
-            values.put(COLUMN_POSTER_PATH, movie.poster_path);
-            values.put(COLUMN_OVERVIEW, movie.overview);
-            values.put(COLUMN_RELEASE_DATE, movie.release_date);
-            return values;
-        }
-
-        public static Movie parseCursor(Cursor cursor) {
-            Movie movie = new Movie();
-            movie.id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
-            movie.title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE));
-            movie.poster_path = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_POSTER_PATH));
-            movie.overview = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_OVERVIEW));
-            movie.release_date = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RELEASE_DATE));
-            return movie;
-        }
+    private Db() {
+        throw new AssertionError("No instances.");
     }
 }

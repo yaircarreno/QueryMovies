@@ -10,8 +10,8 @@ import com.yupiigames.querymovies.QueryMoviesApplication;
 import com.yupiigames.querymovies.util.AndroidComponentUtil;
 import com.yupiigames.querymovies.util.NetworkUtil;
 import javax.inject.Inject;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -21,7 +21,7 @@ public class SyncService extends Service {
 
     @Inject
     DataManager mDataManager;
-    private Subscription mSubscription;
+    private CompositeDisposable mDisposables;
 
     public static Intent getStartIntent(Context context) {
         return new Intent(context, SyncService.class);
@@ -39,6 +39,9 @@ public class SyncService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId) {
+        if (mDisposables == null) {
+            mDisposables = new CompositeDisposable();
+        }
         Timber.i("Starting sync...");
         String title = intent.getStringExtra("title");
         String page = intent.getStringExtra("page");
@@ -49,9 +52,9 @@ public class SyncService extends Service {
             return START_NOT_STICKY;
         }
 
-        if (mSubscription != null && !mSubscription.isUnsubscribed())
-            mSubscription.unsubscribe();
-        mSubscription = mDataManager.syncMovies(title, page)
+        if (mDisposables != null)
+            mDisposables.clear();
+        mDisposables.add(mDataManager.syncMovies(title, page)
                 .subscribeOn(Schedulers.io()).subscribe(movie -> {
                 }, throwable -> {
                     Timber.w(throwable, "Error syncing.");
@@ -59,15 +62,15 @@ public class SyncService extends Service {
                 }, () -> {
                     Timber.i("Synced successfully!");
                     stopSelf(startId);
-                });
+                }));
 
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        if (mSubscription != null)
-            mSubscription.unsubscribe();
+        if (mDisposables != null)
+            mDisposables.clear();
         super.onDestroy();
     }
 
@@ -80,7 +83,7 @@ public class SyncService extends Service {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)
+            if (intent.getAction() != null && intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)
                     && NetworkUtil.isNetworkConnected(context)) {
                 Timber.i("Connection is now available, triggering sync...");
                 AndroidComponentUtil.toggleComponent(context, this.getClass(), false);

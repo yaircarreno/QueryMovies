@@ -5,11 +5,8 @@ import android.content.Context;
 import com.yupiigames.querymovies.injection.scope.ActivityContext;
 import com.yupiigames.querymovies.ui.adapter.MoviesAdapter;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by yair.carreno on 3/19/2016.

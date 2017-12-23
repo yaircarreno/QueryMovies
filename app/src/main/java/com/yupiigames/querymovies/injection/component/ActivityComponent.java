@@ -4,7 +4,6 @@ import com.yupiigames.querymovies.injection.module.ActivityModule;
 import com.yupiigames.querymovies.injection.scope.PerActivity;
 import com.yupiigames.querymovies.ui.activity.MainActivity;
 import dagger.Component;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * This component inject dependencies to all Activities across the application
